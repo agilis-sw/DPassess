@@ -7,31 +7,32 @@ shinyUI(pageWithSidebar(
   
  
   
-  # Sidebar with sliders that demonstrate various available options
+  # Sidebar with radiobuttons and sliders to enter values
   sidebarPanel(
-    radioButtons("sex", "Sex - determined by visual inspection",
-                 c("male - testes visible" =   "M",
-                   "female - egg sac visible" = "F",
-                   "immature" = "I")),
-    # Simple integer interval
+  # radiobuttons to enter sex data  
+     radioButtons("sex", "Sex - determined by visual inspection",
+                     c("male - testes visible" =   "M",
+                       "female - egg sac visible" = "F",
+                       "immature" = "I")),
+ # Slider to enter length value
     sliderInput("length", "Length of shell(mm):", 
                 min=30, max=170, value=85),
     
-    # Decimal interval with step value
+ # Slider to enter diameter value
     sliderInput("diameter", "Diameter of shell(mm):", 
                 min=25, max=130, value=65),
     
-    # Specification of range within an interval
+ # Slider to enter height value
     sliderInput("height", "Height of shell(mm):",
                 min=5, max=60, value=35),
     
-    # Specification of range within an interval
+ # Slider to enter weight value
     sliderInput("weight", "Live weight(g):",
                 min=10, max=450, value=200)),
     
 
   
-  # Show a table summarizing the values entered
+  # Main panel with explanatory test and the calculated value
   mainPanel(
     h3('Introduction'),
     
