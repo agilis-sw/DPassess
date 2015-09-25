@@ -3,7 +3,7 @@ library(shiny)
 shinyUI(pageWithSidebar(
   
   #  Application title
-  headerPanel("Abelone age determination"),
+  headerPanel("Abalone age determination"),
   
  
   

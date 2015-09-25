@@ -1,0 +1,5 @@
+shinyapps::setAccountInfo(name='jw149j',
+                                                         token='8A4377DDC22F92AB59B4AAB44F99877A', 
+                                                         secret='sghY65O7jpI+X2CrsQ/W+NdSxkAhv9sk5UB1qG2z')
+
+https://jw149j.shinyapps.io/assess

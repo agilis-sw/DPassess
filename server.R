@@ -1,10 +1,15 @@
 library(shiny)
 source("abstuff.R")
+
+# retrieve the linear regression model from file
 getModel("ABmodel.lm")
 
-# Define server logic for slider examples
+# Define server logic for slider and radio button input values
 shinyServer(function(input, output) {  
-  # Show the values using an HTML table
-    output$vals<-renderPrint(paste(input$sex,input$length,input$diameter,input$height,input$weight,sep="|"))
-    output$estAge<-renderPrint(ageAbelone(as.character(input$sex),input$length,input$diameter,input$height,input$weight))
+
+    output$estAge<-renderPrint(ageAbalone(as.character(input$sex),
+                                          input$length,
+                                          input$diameter,
+                                          input$height,
+                                          input$weight))
 })

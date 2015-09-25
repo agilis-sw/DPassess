@@ -1,0 +1,56 @@
+---
+title: "Development of linear regression model for aging abalone."
+author: "JMW0103"
+date: "Friday, September 25, 2015"
+output: html_document
+---
+
+# Introduction 
+
+If you are harvesting live abalone there are major fines/confiscation of catch for taking animals that are too young. Costly, especially if you are also concerned with the sustainability of the shell beds.  
+  
+The direct way of determining the age of an abalone involves slicing and staining the shell and looking at the pattern of rings through a microscope. This has a number of drawbacks - the most obvious being that the abalone is both dead, and commercially unusable.  
+  
+The aim of this project is to generate a simple linerar regression model relating a number of measurements and observations that can be made on live shells to the age of an abalone (determined by growth rings). The data used for the application was generated in the following study:
+
+[https://archive.ics.uci.edu/ml/datasets/Abalone](https://archive.ics.uci.edu/ml/datasets/Abalone)  
+  
+  
+Load required packages and get the data set.
+
+```{r}
+library(caret)
+library(digest)
+set.seed(91295)
+#&&(identical(digest("abalone.data",file=TRUE),"40ff04f0c06757bc064025acd0c1ee30")))
+if(file.exists("abalone.data")){   
+} else{  download.file("http://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data","abalone.data")}
+```
+
+##Pre-processing of the data
+
+The [Data Set Information](https://archive.ics.uci.edu/ml/datasets/Abalone) notes that the continuous measurements ( in mm and g) have been scaled by division by 200, while age is detemined as no. of rings+1.5. Load the data file into a data frame and adjust values. Extract the measurements that could be determined from a live animal without significant harm (i.e. observations of sex, dimensions of the shell and live weight), along with the age value. Create a training and a test set.
+
+
+```{r}
+baseData<-read.csv("abalone.data")
+dim(baseData)
+baseData[,2:8]<-baseData[,2:8]*200
+baseData[,9]<-baseData[,9]+1.5
+vitals<-baseData[,c(1,2,3,4,5,9)]
+names(vitals)<-c("Sex","Length","Diameter","Height","Whole_wt","Rings")
+trainSetindex <- createDataPartition(y = vitals[,ncol(vitals)], p = 0.70, list = FALSE)
+testSet<-vitals[-trainSetindex,]
+trainSet<-vitals[trainSetindex,]
+```
+
+```{r}
+lmFit <- train(Rings ~ Sex+Length*Diameter*Height+Whole_wt,data=trainSet, method="lm")
+save(lmFit,file="ABmodel.lm")
+pred<-predict(lmFit,newdata=testSet)
+plot(testSet[,6],pred)
+```
+
+Examination of the relationship between the observed and predicted values for the ages of the abalones in the test set indicates a usable relationship - the prediction is **NOT** highly accuarate but enables a useful indication of the age of the shell - and errs on the side of caution.
+
+This linear regression model has been utilized in the development of a [shinyapp](https://jw149j.shinyapp.io/assess/) for the determination of abalone ages.
